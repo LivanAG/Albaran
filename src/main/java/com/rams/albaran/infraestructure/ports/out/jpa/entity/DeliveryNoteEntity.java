@@ -38,10 +38,10 @@ public class DeliveryNoteEntity {
     private Integer loadUnloadTimeCount;
     private Integer kmsCount;
 
-    @Column(columnDefinition = "boolean default false")
+
     private Boolean directPayment = false;
 
-    @Column(columnDefinition = "boolean default false")
+
     private Boolean isNational = false;
     // ---------------------------------------
     // CAMPOS MONETARIOS (BigDecimal)

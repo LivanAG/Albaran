@@ -1,6 +1,5 @@
 package com.rams.albaran.infraestructure.ports.in.rest.specifications;
 
-
 import com.rams.albaran.infraestructure.ports.out.jpa.entity.DeliveryNoteEntity;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -11,8 +10,10 @@ public class DeliveryNoteSpecifications {
     public static Specification<DeliveryNoteEntity> hasNumber(Integer number) {
         return (root, query, cb) -> {
             if (number == null) return null;
+
+            // PostgreSQL: '' || number -> convierte a texto
             return cb.like(
-                    root.get("number").as(String.class),
+                    cb.concat(cb.literal(""), root.get("number")),
                     "%" + number + "%"
             );
         };
