@@ -26,7 +26,10 @@ public class ZoneMapperEntity {
         if (domain == null) return null;
 
         ZoneEntity entity = new ZoneEntity();
-        entity.setId(domain.getId());
+        if (domain.getId() != null){
+            entity.setId(domain.getId());
+        }
+
         entity.setName(domain.getName());
         entity.setCp(domain.getCp());
         entity.setSuburb(domain.getSuburb());

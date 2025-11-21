@@ -2,6 +2,7 @@ package com.rams.albaran.infraestructure.ports.out.jpa.mapper;
 
 import com.rams.albaran.domain.model.Service;
 import com.rams.albaran.infraestructure.ports.out.jpa.entity.ServiceEntity;
+import com.rams.albaran.infraestructure.ports.out.jpa.entity.ZoneEntity;
 
 public class ServiceMapperEntity {
     // ---------------------------------------
@@ -24,7 +25,10 @@ public class ServiceMapperEntity {
         if (domain == null) return null;
 
         ServiceEntity entity = new ServiceEntity();
-        entity.setId(domain.getId());
+
+        if (domain.getId() != null){
+            entity.setId(domain.getId());
+        }
         entity.setType(domain.getType());
 
         return entity;
