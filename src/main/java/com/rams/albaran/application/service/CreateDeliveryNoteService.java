@@ -46,6 +46,9 @@ public class CreateDeliveryNoteService {
             }
             d.setDirectPayment(true);
 
+            if(deliveryNote.getComment() != null){
+                d.setComment(deliveryNote.getComment());
+            }
             // SETEAR TODO LO DEMÁS A NULL
             d.setServiceCount(null);
             d.setSuburbCount(null);
@@ -78,13 +81,22 @@ public class CreateDeliveryNoteService {
             }
 
 
+
+
             //Asignamos fecha del albaran
             d.setDate(deliveryNote.getDate());
             //Asignamos numero de albaran
             d.setNumber(deliveryNote.getNumber());
+
             //Asignamos la cantidad de servicios en dependencia de la cantidad de zonas
             d.setServiceCount(d.getZones() != null ? d.getZones().size() : 0);
             d.setIsNational(deliveryNote.getIsNational());
+
+            //Asignamos el comentario
+            if(deliveryNote.getComment() != null){
+                d.setComment(deliveryNote.getComment());
+            }
+
 
             //Asignamos cantidad de extrarradios en dependencia de las zonas
             int countSuburb = d.getZones().stream()
@@ -115,35 +127,57 @@ public class CreateDeliveryNoteService {
                     .valueOf(d.getSuburbCount())
                     .multiply(price.getSuburb())
                     .setScale(2, RoundingMode.HALF_UP);
-            d.setTotalAmountSuburb(totalSuburb);
+
 
             // Multiplicamos servicio × precio servicio
             BigDecimal totalService = BigDecimal
                     .valueOf(d.getServiceCount())
                     .multiply(price.getServicePrice())
                     .setScale(2, RoundingMode.HALF_UP);
-            d.setTotalAmountService(totalService);
+
 
             // Multiplicamos tiempo carga/descarga × su precio
             BigDecimal totalLoadUnloadTime = BigDecimal
                     .valueOf(d.getLoadUnloadTimeCount())
                     .multiply(price.getLoadUnloadTime())
                     .setScale(2, RoundingMode.HALF_UP);
-            d.setTotalAmountloadUnloadTime(totalLoadUnloadTime);
+
 
             // Multiplicamos kms × precio km
             BigDecimal totalkms = BigDecimal
                     .valueOf(d.getKmsCount())
                     .multiply(price.getKm())
                     .setScale(2, RoundingMode.HALF_UP);
-            d.setTotalAmountKms(totalkms);
+
 
             // NATIONAL PLUSS
             BigDecimal nationalPlus = BigDecimal.ZERO;
             if (deliveryNote.getIsNational()) {
                 nationalPlus = price.getNational().setScale(2, RoundingMode.HALF_UP);
-                d.setTotalNational(nationalPlus);
             }
+
+
+            // ======================================
+            // APLICAR FUERA DE HORARIO X2
+            // ======================================
+            if (deliveryNote.getIsOutOfTime()) {
+                d.setIsOutOfTime(true);
+                totalSuburb = totalSuburb.multiply(BigDecimal.valueOf(2));
+                totalService = totalService.multiply(BigDecimal.valueOf(2));
+                totalLoadUnloadTime = totalLoadUnloadTime.multiply(BigDecimal.valueOf(2));
+                totalkms = totalkms.multiply(BigDecimal.valueOf(2));
+                nationalPlus = nationalPlus.multiply(BigDecimal.valueOf(2));
+            }else{
+                d.setIsOutOfTime(false);
+            }
+
+            // GUARDAR LOS TOTALES
+            d.setTotalAmountKms(totalkms);
+            d.setTotalAmountloadUnloadTime(totalLoadUnloadTime);
+            d.setTotalAmountSuburb(totalSuburb);
+            d.setTotalAmountService(totalService);
+            d.setTotalNational(nationalPlus);
+
 
             // Sumar todos los totales con precisión
             BigDecimal totalDeliveryNote = totalSuburb
@@ -154,10 +188,7 @@ public class CreateDeliveryNoteService {
                     .setScale(2, RoundingMode.HALF_UP);
 
 
-
-
             d.setTotalDeliveryNoteAmount(totalDeliveryNote);
-
 
 
         }

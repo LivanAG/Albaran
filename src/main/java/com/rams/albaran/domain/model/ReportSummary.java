@@ -23,5 +23,9 @@ public class ReportSummary {
     private BigDecimal totalLoadAmount = BigDecimal.ZERO;
     private BigDecimal totalNationalAmount = BigDecimal.ZERO;
     private BigDecimal totalAmount = BigDecimal.ZERO;
+
+    // 🆕 NUEVOS CAMPOS
+    private int deliveryNoteCount = 0;
+    private BigDecimal totalWithIVA = BigDecimal.ZERO;
 }
 

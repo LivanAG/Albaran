@@ -1,6 +1,7 @@
 package com.rams.albaran.domain.model;
 
 
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,4 +30,6 @@ public class DeliveryNote {
     private BigDecimal totalNational;
     private Boolean directPayment;
     private Boolean isNational;
+    private String comment;
+    private Boolean isOutOfTime;
 }

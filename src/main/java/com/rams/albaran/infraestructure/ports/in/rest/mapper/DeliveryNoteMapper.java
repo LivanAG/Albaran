@@ -47,6 +47,8 @@ public class DeliveryNoteMapper {
         dto.setTotalAmount(domain.getTotalDeliveryNoteAmount());
         dto.setNational(domain.getIsNational());
 
+        dto.setComment(domain.getComment());
+        dto.setIsOutOfTime(domain.getIsOutOfTime());
         if (dto.isNational()) {
             dto.setTotalNational(domain.getTotalNational());
         }
@@ -83,6 +85,9 @@ public class DeliveryNoteMapper {
         if (dto.getNumber() != null) {
             deliveryNote.setNumber(dto.getNumber());
         }
+
+        deliveryNote.setComment(dto.getComment());
+        deliveryNote.setIsOutOfTime(dto.getIsOutOfTime());
 
         // Valores que vienen del DTO
         deliveryNote.setLoadUnloadTimeCount(dto.getLoadUnloadTimeCount() != null ? dto.getLoadUnloadTimeCount() : 0);

@@ -106,7 +106,16 @@ public class GenerateReportUseCase implements InGetReportPort {
             // *** Faltaba esto para que el importe global de C/D no sea 0 ***
             globalTotal.setTotalLoadAmount(globalTotal.getTotalLoadAmount()
                     .add(dn.getTotalAmountloadUnloadTime() != null ? dn.getTotalAmountloadUnloadTime() : BigDecimal.ZERO));
+
+            // 🆕 NUEVO: contar albaranes
+            sum.setDeliveryNoteCount(sum.getDeliveryNoteCount() + 1);
+            globalTotal.setDeliveryNoteCount(globalTotal.getDeliveryNoteCount() + 1);
         }
+
+        // 🆕 NUEVO: calcular total con IVA (21%)
+        globalTotal.setTotalWithIVA(
+                globalTotal.getTotalAmount().multiply(BigDecimal.valueOf(1.21))
+        );
 
         // Construir respuesta final
         Report report = new Report();

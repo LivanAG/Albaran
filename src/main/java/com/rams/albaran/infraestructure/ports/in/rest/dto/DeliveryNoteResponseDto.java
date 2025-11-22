@@ -32,5 +32,7 @@ public class DeliveryNoteResponseDto {
     private BigDecimal totalNational;
 
     private boolean isNational;
+    private String comment;
+    private Boolean isOutOfTime;
 
 }

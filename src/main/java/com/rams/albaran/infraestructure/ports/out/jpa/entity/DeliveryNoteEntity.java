@@ -41,7 +41,10 @@ public class DeliveryNoteEntity {
 
     private Boolean directPayment = false;
 
+    @Column(length = 1000)
+    private String comment;
 
+    private Boolean isOutOfTime = false;
     private Boolean isNational = false;
     // ---------------------------------------
     // CAMPOS MONETARIOS (BigDecimal)

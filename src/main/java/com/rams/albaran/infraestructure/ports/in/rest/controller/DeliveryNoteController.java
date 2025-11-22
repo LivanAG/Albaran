@@ -115,9 +115,9 @@ public class DeliveryNoteController {
                 return ResponseEntity.badRequest().body("Debe seleccionar al menos una zona.");
             }
 
-            // loadUnloadTimeCount obligatorio
+            // loadUnloadTimeCount se pone a 0 si viene null
             if (dto.getLoadUnloadTimeCount() == null) {
-                return ResponseEntity.badRequest().body("El tiempo de carga/descarga es obligatorio.");
+                dto.setLoadUnloadTimeCount(0);
             }
 
             // totalAmount debe venir null
@@ -151,7 +151,7 @@ public class DeliveryNoteController {
             }
 
             // totalAmount obligatorio
-            if (dto.getTotalAmount() == null || dto.getTotalAmount() <= 0) {
+            if (dto.getTotalAmount() == null) {
                 return ResponseEntity.badRequest().body("El totalAmount es obligatorio en pago directo.");
             }
 
@@ -177,9 +177,9 @@ public class DeliveryNoteController {
                 return ResponseEntity.badRequest().body("Debe seleccionar al menos una zona.");
             }
 
-            // loadUnloadTimeCount obligatorio
+            // loadUnloadTimeCount se pone a 0 si viene null
             if (dto.getLoadUnloadTimeCount() == null) {
-                return ResponseEntity.badRequest().body("El tiempo de carga/descarga es obligatorio.");
+                dto.setLoadUnloadTimeCount(0);
             }
 
             // totalAmount debe venir null

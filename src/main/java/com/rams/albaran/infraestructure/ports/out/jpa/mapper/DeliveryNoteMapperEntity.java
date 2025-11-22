@@ -49,6 +49,9 @@ public class DeliveryNoteMapperEntity {
         }else{
             dn.setTotalNational(null);
         }
+
+        dn.setIsOutOfTime(entity.getIsOutOfTime());
+        dn.setComment(entity.getComment());
         return dn;
     }
 
@@ -90,6 +93,9 @@ public class DeliveryNoteMapperEntity {
         }else{
             entity.setTotalNational(null);
         }
+
+        entity.setIsOutOfTime(domain.getIsOutOfTime());
+        entity.setComment(domain.getComment());
         return entity;
     }
 }

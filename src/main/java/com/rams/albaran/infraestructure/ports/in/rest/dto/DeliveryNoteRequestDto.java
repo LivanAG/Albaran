@@ -18,6 +18,7 @@ public class DeliveryNoteRequestDto {
     private Double totalAmount;
     private Boolean directPayment;
     private boolean national;
-
+    private String comment;
+    private Boolean isOutOfTime;
 
 }
