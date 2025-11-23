@@ -25,11 +25,8 @@ public class DeliveryNoteEntity {
     @JoinColumn(name = "service_id")
     private ServiceEntity serviceEntity;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
-    @JoinTable(name = "delivery_note_zone",
-            joinColumns = @JoinColumn(name = "delivery_note_id"),
-            inverseJoinColumns = @JoinColumn(name = "zone_id"))
-    private List<ZoneEntity> zoneEntities;
+    @OneToMany(mappedBy = "deliveryNote", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DeliveryNoteZoneEntity> deliveryNoteZones;
 
     private Integer number;
 

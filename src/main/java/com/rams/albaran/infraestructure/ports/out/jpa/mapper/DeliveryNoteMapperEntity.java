@@ -4,6 +4,8 @@ import com.rams.albaran.domain.model.DeliveryNote;
 import com.rams.albaran.domain.model.Zone;
 
 import com.rams.albaran.infraestructure.ports.out.jpa.entity.DeliveryNoteEntity;
+import com.rams.albaran.infraestructure.ports.out.jpa.entity.DeliveryNoteZoneEntity;
+import com.rams.albaran.infraestructure.ports.out.jpa.entity.ServiceEntity;
 import com.rams.albaran.infraestructure.ports.out.jpa.entity.ZoneEntity;
 
 import java.util.List;
@@ -21,12 +23,13 @@ public class DeliveryNoteMapperEntity {
         dn.setId(entity.getId());
         dn.setNumber(entity.getNumber());
         dn.setDirectPayment(entity.getDirectPayment());
-        dn.setDate(entity.getDate()); // LocalDate directly
+        dn.setDate(entity.getDate());
 
         dn.setService(ServiceMapperEntity.entityToDomain(entity.getServiceEntity()));
 
-        List<Zone> zones = entity.getZoneEntities() != null
-                ? entity.getZoneEntities().stream()
+        List<Zone> zones = entity.getDeliveryNoteZones() != null
+                ? entity.getDeliveryNoteZones().stream()
+                .map(DeliveryNoteZoneEntity::getZone)
                 .map(ZoneMapperEntity::entityToDomain)
                 .collect(Collectors.toList())
                 : List.of();
@@ -44,9 +47,10 @@ public class DeliveryNoteMapperEntity {
         dn.setTotalAmountKms(entity.getTotalAmountKms());
         dn.setTotalDeliveryNoteAmount(entity.getTotalDeliveryNoteAmount());
         dn.setIsNational(entity.getIsNational());
-        if (dn.getIsNational()){
+
+        if (dn.getIsNational()) {
             dn.setTotalNational(entity.getTotalNational());
-        }else{
+        } else {
             dn.setTotalNational(null);
         }
 
@@ -65,17 +69,28 @@ public class DeliveryNoteMapperEntity {
         entity.setId(domain.getId());
         entity.setNumber(domain.getNumber());
         entity.setDirectPayment(domain.getDirectPayment());
-        entity.setDate(domain.getDate()); // LocalDate directly
+        entity.setDate(domain.getDate());
 
-        entity.setServiceEntity(ServiceMapperEntity.domainToEntity(domain.getService()));
+        if (domain.getService() != null) {
+            ServiceEntity serviceEntity = new ServiceEntity();
+            serviceEntity.setId(domain.getService().getId());
+            entity.setServiceEntity(serviceEntity);
+        }
 
-        List<ZoneEntity> zoneEntities = domain.getZones() != null
-                ? domain.getZones().stream()
-                .map(ZoneMapperEntity::domainToEntity)
-                .collect(Collectors.toList())
-                : List.of();
+        if (domain.getZones() != null && !domain.getZones().isEmpty()) {
+            List<DeliveryNoteZoneEntity> relations = domain.getZones().stream()
+                    .map(z -> {
+                        ZoneEntity zone = new ZoneEntity();
+                        zone.setId(z.getId());
 
-        entity.setZoneEntities(zoneEntities);
+                        DeliveryNoteZoneEntity link = new DeliveryNoteZoneEntity();
+                        link.setDeliveryNote(entity);
+                        link.setZone(zone);
+                        return link;
+                    })
+                    .toList();
+            entity.setDeliveryNoteZones(relations);
+        }
 
         entity.setServiceCount(domain.getServiceCount());
         entity.setSuburbCount(domain.getSuburbCount());
@@ -88,9 +103,10 @@ public class DeliveryNoteMapperEntity {
         entity.setTotalAmountKms(domain.getTotalAmountKms());
         entity.setTotalDeliveryNoteAmount(domain.getTotalDeliveryNoteAmount());
         entity.setIsNational(domain.getIsNational());
-        if (entity.getIsNational()){
+
+        if (entity.getIsNational()) {
             entity.setTotalNational(domain.getTotalNational());
-        }else{
+        } else {
             entity.setTotalNational(null);
         }
 

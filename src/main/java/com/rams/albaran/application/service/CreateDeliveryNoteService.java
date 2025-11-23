@@ -73,11 +73,10 @@ public class CreateDeliveryNoteService {
 
             // lógica cuando es un servicio por zonas
             if (deliveryNote.getZones() != null && !deliveryNote.getZones().isEmpty()) {
-                //Comprobamos que las zonas existan y las cargamos completas
-                List<Integer> zoneIds = deliveryNote.getZones().stream()
-                        .map(Zone::getId)
+                List<Zone> zones = deliveryNote.getZones().stream()
+                        .map(z -> outGetZonePort.getZoneById(z.getId())) // NO agrupar, cargar uno por uno
                         .toList();
-                d.setZones(outGetZonePort.getZoneListByIds(zoneIds));
+                d.setZones(zones);
             }
 
 

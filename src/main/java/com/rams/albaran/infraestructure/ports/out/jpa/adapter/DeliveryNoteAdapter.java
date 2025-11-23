@@ -82,7 +82,6 @@ public class DeliveryNoteAdapter implements OutDeliveryNotePort, OutDeleteDelive
 
     @Override
     public void deleteByIds(List<Integer> ids) {
-        deliveryNoteRepository.deleteRelations(ids);   // borra tabla intermedia
-        deliveryNoteRepository.deleteAllByIdIn(ids);   // borra los delivery notes
+        deliveryNoteRepository.deleteAllByIdIn(ids);
     }
 }
