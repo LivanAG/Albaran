@@ -105,7 +105,6 @@ public class CreateDeliveryNoteService {
             d.setSuburbCount(countSuburb);
 
 
-
             //Asignamos el total de kms segun todas las zonas
             int totalKms = d.getZones().stream()
                     .filter(zone -> zone.getKms() != null)
@@ -161,6 +160,12 @@ public class CreateDeliveryNoteService {
             // ======================================
             if (deliveryNote.getIsOutOfTime()) {
                 d.setIsOutOfTime(true);
+
+                d.setServiceCount(d.getServiceCount()*2);
+                d.setSuburbCount(countSuburb*2);
+                d.setKmsCount(totalKms*2);
+                d.setLoadUnloadTimeCount(d.getLoadUnloadTimeCount()*2);
+
                 totalSuburb = totalSuburb.multiply(BigDecimal.valueOf(2));
                 totalService = totalService.multiply(BigDecimal.valueOf(2));
                 totalLoadUnloadTime = totalLoadUnloadTime.multiply(BigDecimal.valueOf(2));
